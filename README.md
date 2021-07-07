@@ -1,1 +1,1 @@
-# analytics-api
+# ecommerce-analytics-api
