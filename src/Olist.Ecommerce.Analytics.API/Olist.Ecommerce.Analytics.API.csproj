@@ -13,12 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Ecommerce.Analytics.Application\Ecommerce.Analytics.Application.csproj" />
-    <ProjectReference Include="..\Ecommerce.Analytics.Infrastructure\Ecommerce.Analytics.Infrastructure.csproj" />
+    <ProjectReference Include="..\Olist.Ecommerce.Analytics.Application\Olist.Ecommerce.Analytics.Application.csproj" />
+    <ProjectReference Include="..\Olist.Ecommerce.Analytics.Infrastructure\Olist.Ecommerce.Analytics.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

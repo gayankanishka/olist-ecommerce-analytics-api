@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F1CFEB9C-A0AA-4CC8-9355-775FF80E9D01}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.Analytics.API", "src\Ecommerce.Analytics.API\Ecommerce.Analytics.API.csproj", "{AF38C9F9-1A32-4C58-92F0-20885300BAFF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Olist.Ecommerce.Analytics.API", "src\Olist.Ecommerce.Analytics.API\Olist.Ecommerce.Analytics.API.csproj", "{AF38C9F9-1A32-4C58-92F0-20885300BAFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.Analytics.Domain", "src\Ecommerce.Analytics.Domain\Ecommerce.Analytics.Domain.csproj", "{6BA8F0DC-050A-4D55-AC9B-8652171FDC36}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Olist.Ecommerce.Analytics.Domain", "src\Olist.Ecommerce.Analytics.Domain\Olist.Ecommerce.Analytics.Domain.csproj", "{6BA8F0DC-050A-4D55-AC9B-8652171FDC36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.Analytics.Application", "src\Ecommerce.Analytics.Application\Ecommerce.Analytics.Application.csproj", "{20EDBBD0-EE23-4D92-A9F4-CC362F457F24}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Olist.Ecommerce.Analytics.Application", "src\Olist.Ecommerce.Analytics.Application\Olist.Ecommerce.Analytics.Application.csproj", "{20EDBBD0-EE23-4D92-A9F4-CC362F457F24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.Analytics.Infrastructure", "src\Ecommerce.Analytics.Infrastructure\Ecommerce.Analytics.Infrastructure.csproj", "{72885599-78FC-439E-A6A1-E712CD51D6B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Olist.Ecommerce.Analytics.Infrastructure", "src\Olist.Ecommerce.Analytics.Infrastructure\Olist.Ecommerce.Analytics.Infrastructure.csproj", "{72885599-78FC-439E-A6A1-E712CD51D6B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

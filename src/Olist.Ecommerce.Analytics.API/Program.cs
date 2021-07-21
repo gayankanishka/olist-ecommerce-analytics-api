@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Ecommerce.Analytics.API
+namespace Olist.Ecommerce.Analytics.API
 {
     public class Program
     {

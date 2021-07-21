@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace Ecommerce.Analytics.Application
+namespace Olist.Ecommerce.Analytics.Application
 {
     /// <summary>
     /// Dependency injection extension to configure Application layer services.

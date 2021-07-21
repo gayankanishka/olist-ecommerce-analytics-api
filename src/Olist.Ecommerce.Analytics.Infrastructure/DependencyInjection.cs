@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Ecommerce.Analytics.Infrastructure
+namespace Olist.Ecommerce.Analytics.Infrastructure
 {
     /// <summary>
     /// Dependency injection extension to configure Infrastructure layer services.

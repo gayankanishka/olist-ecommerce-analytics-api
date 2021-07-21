@@ -1,5 +1,5 @@
-using Ecommerce.Analytics.Application;
-using Ecommerce.Analytics.Infrastructure;
+using Olist.Ecommerce.Analytics.Application;
+using Olist.Ecommerce.Analytics.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-namespace Ecommerce.Analytics.API
+namespace Olist.Ecommerce.Analytics.API
 {
     public class Startup
     {
@@ -24,7 +24,7 @@ namespace Ecommerce.Analytics.API
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ecommerce.Analytics.API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Olist.Ecommerce.Analytics.API", Version = "v1" });
             });
 
             services.AddApplication();
@@ -38,7 +38,7 @@ namespace Ecommerce.Analytics.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecommerce.Analytics.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Olist.Ecommerce.Analytics.API v1"));
             }
 
             app.UseHttpsRedirection();
