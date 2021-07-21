@@ -7,6 +7,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="MySql.EntityFrameworkCore" Version="5.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Olist.Ecommerce.Analytics.Application\Olist.Ecommerce.Analytics.Application.csproj" />
+    <ProjectReference Include="..\Olist.Ecommerce.Analytics.Domain\Olist.Ecommerce.Analytics.Domain.csproj" />
   </ItemGroup>
 
 </Project>

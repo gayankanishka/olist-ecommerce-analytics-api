@@ -1,5 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
+using Olist.Ecommerce.Analytics.Infrastructure.Persistence;
 
 namespace Olist.Ecommerce.Analytics.Infrastructure
 {
@@ -16,6 +19,18 @@ namespace Olist.Ecommerce.Analytics.Infrastructure
         /// <returns></returns>
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddDbContext<ApplicationDbContext>(_ =>
+            {
+                _.UseMySQL
+                (
+                    configuration.GetConnectionString("OlistDb"),
+                    h => h.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
+                );
+            });
+
+            services.AddScoped<IApplicationDbContext>(_ =>
+                _.GetService<ApplicationDbContext>());
+
             return services;
         }
     }
