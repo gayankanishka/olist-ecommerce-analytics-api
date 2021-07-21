@@ -1,6 +1,6 @@
 ﻿namespace Olist.Ecommerce.Analytics.Domain.Models
 {
-    public class Location
+    public class Seller
     {
     }
 }
