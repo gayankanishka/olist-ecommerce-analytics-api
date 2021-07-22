@@ -9,10 +9,6 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages
     {
         public DateFilters Filter { get; set; }
 
-        public GetSalesPercentagesQuery()
-        {
-        }
-
         public GetSalesPercentagesQuery(DateFilters filter)
         {
             Filter = filter;
