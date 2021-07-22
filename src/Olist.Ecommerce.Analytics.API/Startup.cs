@@ -1,11 +1,12 @@
-using Olist.Ecommerce.Analytics.Application;
-using Olist.Ecommerce.Analytics.Infrastructure;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Olist.Ecommerce.Analytics.Application;
+using Olist.Ecommerce.Analytics.Infrastructure;
 
 namespace Olist.Ecommerce.Analytics.API
 {
@@ -27,6 +28,7 @@ namespace Olist.Ecommerce.Analytics.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Olist.Ecommerce.Analytics.API", Version = "v1" });
             });
 
+            services.AddMediatR(typeof(Startup));
             services.AddApplication();
             services.AddInfrastructure(Configuration);
         }

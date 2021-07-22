@@ -1,5 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Net;
+using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Olist.Ecommerce.Analytics.Application.Products.GetFastMovingProducts;
+using Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages;
+using Olist.Ecommerce.Analytics.Application.Products.GetSlowMovingProducts;
+using Olist.Ecommerce.Analytics.Domain.Enums;
+using Olist.Ecommerce.Analytics.Domain.Models;
 
 namespace Olist.Ecommerce.Analytics.API.Controllers
 {
@@ -7,17 +15,31 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        [HttpGet]
+        private readonly IMediator _mediator;
+
+        public ProductController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
         [Route("fast-moving")]
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetFastMovingProductsAsync()
         {
             // TODO: This should return top selling products
+            IEnumerable<Product> products = await _mediator.Send(new GetFastMovingProductsQuery());
 
-            return Ok();
+            return Ok(products);
         }
 
+        [Route("{locationId}/slow-moving")]
         [HttpGet]
-        [Route("slow-moving/{locationId}")]
+        [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> GetSlowMovingProductsAsync([FromRoute] string locationId)
         {
             // TODO: This should return the slow moving items as objects and users as objects alongside
@@ -27,17 +49,25 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
                 return BadRequest("LocationId required!");
             }
 
-            return Ok();
+            IEnumerable<Product> products = await _mediator.Send(
+                new GetSlowMovingProductsQuery(locationId));
+
+            return Ok(products);
         }
 
-        [HttpGet]
         [Route("sales-percentages")]
-        public async Task<IActionResult> GetSalesPercentagesAsync([FromQuery] string type)
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<SalesPercentage>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> GetSalesPercentagesAsync([FromQuery] DateFilters filter)
         {
             // TODO: This should return a list of categories with percentages
-            // /api/analytics/salespercentages?type=weekly or /api/analytics/salespercentages?type=daily
 
-            return Ok();
+            IEnumerable<SalesPercentage> salesPercentages = await _mediator.Send(
+                new GetSalesPercentagesQuery(filter));
+
+            return Ok(salesPercentages);
         }
     }
 }
