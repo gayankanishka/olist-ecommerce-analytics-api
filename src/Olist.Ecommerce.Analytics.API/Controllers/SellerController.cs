@@ -8,10 +8,15 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
     public class SellerController : ControllerBase
     {
         [HttpGet]
-        [Route("most-popular/{itemId}")]
-        public async Task<IActionResult> GetMostPopularSellersAsync([FromRoute] string itemId)
+        [Route("most-popular/{productId}")]
+        public async Task<IActionResult> GetMostPopularSellersAsync([FromRoute] string productId)
         {
             // TODO: This should return the most popular seller objects by itemId
+
+            if (string.IsNullOrWhiteSpace(productId))
+            {
+                return BadRequest("ProductId required!");
+            }
 
             return Ok();
         }

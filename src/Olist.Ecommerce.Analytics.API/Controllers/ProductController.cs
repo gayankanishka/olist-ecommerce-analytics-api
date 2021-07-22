@@ -8,9 +8,10 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
     public class ProductController : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetProductsAsync([FromQuery] string limit = "100")
+        [Route("fast-moving")]
+        public async Task<IActionResult> GetFastMovingProductsAsync()
         {
-            // TODO: This should return top 1000 items as objects
+            // TODO: This should return top selling products
 
             return Ok();
         }
@@ -20,6 +21,11 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         public async Task<IActionResult> GetSlowMovingProductsAsync([FromRoute] string locationId)
         {
             // TODO: This should return the slow moving items as objects and users as objects alongside
+
+            if (string.IsNullOrWhiteSpace(locationId))
+            {
+                return BadRequest("LocationId required!");
+            }
 
             return Ok();
         }
