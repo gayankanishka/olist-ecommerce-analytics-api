@@ -25,7 +25,7 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         }
 
         [HttpGet]
-        [Route("least-profitable-locations")]
+        [Route("least-profitable")]
         public async Task<IActionResult> GetLeastProfitableLocationsAsync()
         {
             // TODO: This should be a list of location objects with the item object
