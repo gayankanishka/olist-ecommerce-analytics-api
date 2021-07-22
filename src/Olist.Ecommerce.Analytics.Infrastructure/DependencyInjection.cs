@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
+using Olist.Ecommerce.Analytics.Infrastructure.Hadoop;
 using Olist.Ecommerce.Analytics.Infrastructure.Persistence;
 
 namespace Olist.Ecommerce.Analytics.Infrastructure
@@ -30,6 +31,9 @@ namespace Olist.Ecommerce.Analytics.Infrastructure
 
             services.AddScoped<IApplicationDbContext>(_ =>
                 _.GetService<ApplicationDbContext>());
+            services.AddScoped<IWebHdfsClient, WebHdfsClient>();
+
+            services.AddHttpClient<IWebHdfsClient, WebHdfsClient>();
 
             return services;
         }
