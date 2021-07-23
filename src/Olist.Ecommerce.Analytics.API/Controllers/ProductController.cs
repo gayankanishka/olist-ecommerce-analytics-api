@@ -38,7 +38,7 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         /// <response code="500">If something went wrong in the server-end.</response>
         [Route("least-revenue-locations-most-selling")]
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<LeastRevenueLocationsMostSellingProductsDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetLeastRevenueLocationsMostSellingProductsAsync()
