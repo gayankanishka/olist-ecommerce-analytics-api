@@ -1,4 +1,3 @@
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -29,7 +28,6 @@ namespace Olist.Ecommerce.Analytics.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Olist.Ecommerce.Analytics.API", Version = "v1" });
             });
 
-            services.AddMediatR(typeof(Startup));
             services.AddApplication();
             services.AddInfrastructure(Configuration);
         }

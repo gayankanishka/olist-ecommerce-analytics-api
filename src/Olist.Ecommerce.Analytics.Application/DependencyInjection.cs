@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Olist.Ecommerce.Analytics.Application
 {
@@ -14,6 +16,8 @@ namespace Olist.Ecommerce.Analytics.Application
         /// <returns>The service collection.</returns>
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+
             return services;
         }
     }
