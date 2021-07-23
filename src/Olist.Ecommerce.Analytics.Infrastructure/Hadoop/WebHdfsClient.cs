@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
@@ -19,11 +20,11 @@ namespace Olist.Ecommerce.Analytics.Infrastructure.Hadoop
             SetDefaultHeaders();
         }
 
-        public async Task<string> OpenAndReadFileAsync(string path)
+        public async Task<T> OpenAndReadFileAsync<T>(string path) where T : class, new()
         {
             string uri = $"/webhdfs/v1/{path}?op={HdfsOperations.OPEN_AND_READ}";
 
-            return await _httpClient.GetStringAsync(uri);
+            return await _httpClient.GetFromJsonAsync<T>(uri);
         }
 
         public async Task<string> FileOrDirectoryStatusAsync(string path)
