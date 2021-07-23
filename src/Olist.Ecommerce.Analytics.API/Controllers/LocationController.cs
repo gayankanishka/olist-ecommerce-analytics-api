@@ -25,6 +25,7 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         /// Constructor of LocationController.
         /// </summary>
         /// <param name="mediator"></param>
+        /// <param name="memoryCache"></param>
         public LocationController(IMediator mediator, IMemoryCache memoryCache)
         {
             _mediator = mediator;
