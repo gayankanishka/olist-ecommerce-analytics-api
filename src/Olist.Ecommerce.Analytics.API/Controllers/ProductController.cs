@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocationsMostSellingProducts;
 using Olist.Ecommerce.Analytics.Application.Products.GetMostSoldProductsUsingCreditCards;
 using Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages;
+using Olist.Ecommerce.Analytics.Domain.Constants;
 using Olist.Ecommerce.Analytics.Domain.Enums;
 using Olist.Ecommerce.Analytics.Domain.Models;
 
@@ -19,14 +22,17 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMemoryCache _memoryCache;
 
         /// <summary>
         /// Constructor of ProductsController.
         /// </summary>
         /// <param name="mediator"></param>
-        public ProductController(IMediator mediator)
+        /// <param name="memoryCache"></param>
+        public ProductController(IMediator mediator, IMemoryCache memoryCache)
         {
             _mediator = mediator;
+            _memoryCache = memoryCache;
         }
 
         /// <summary>
@@ -37,14 +43,22 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         /// <response code="400">If invalid payload is passed.</response>
         /// <response code="500">If something went wrong in the server-end.</response>
         [Route("least-revenue-locations-most-selling")]
+        [ResponseCache(Duration = 600)]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<LeastRevenueLocationsMostSellingProductsDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetLeastRevenueLocationsMostSellingProductsAsync()
         {
-            IEnumerable<LeastRevenueLocationsMostSellingProductsDto> products = 
-                await _mediator.Send(new GetLeastRevenueLocationsMostSellingProductsQuery());
+            if (_memoryCache.TryGetValue(CacheKeys.LeastRevenueLocationsMostSellingProducts,
+                out IEnumerable<LeastRevenueLocationsMostSellingProductsDto> products))
+            {
+                return Ok(products);
+            }
+
+            products = await _mediator.Send(new GetLeastRevenueLocationsMostSellingProductsQuery());
+
+            _memoryCache.Set(CacheKeys.LeastRevenueLocationsMostSellingProducts, products, MemoryCacheOptions);
 
             return Ok(products);
         }
@@ -57,14 +71,21 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         /// <response code="400">If invalid payload is passed.</response>
         /// <response code="500">If something went wrong in the server-end.</response>
         [Route("most-sold-using-credit-cards")]
+        [ResponseCache(Duration = 600)]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Product>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetMostSoldProductsUsingCreditCardsAsync()
         {
-            IEnumerable<Product> products = await _mediator.Send(
-                new GetMostSoldProductsUsingCreditCardsQuery());
+            if (_memoryCache.TryGetValue(CacheKeys.MostSoldProductsUsingCreditCards, out IEnumerable<Product> products))
+            {
+                return Ok(products);
+            }
+
+            products = await _mediator.Send(new GetMostSoldProductsUsingCreditCardsQuery());
+
+            _memoryCache.Set(CacheKeys.MostSoldProductsUsingCreditCards, products, MemoryCacheOptions);
 
             return Ok(products);
         }
@@ -78,16 +99,30 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         /// <response code="400">If invalid payload is passed.</response>
         /// <response code="500">If something went wrong in the server-end.</response>
         [Route("sales-percentages")]
+        [ResponseCache(Duration = 600)]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<SalesPercentage>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetSalesPercentagesAsync([FromQuery] DateFilters filter)
         {
-            IEnumerable<SalesPercentage> salesPercentages = await _mediator.Send(
-                new GetSalesPercentagesQuery(filter));
+            if (_memoryCache.TryGetValue(CacheKeys.SalesPercentages, out IEnumerable<SalesPercentage> salesPercentages))
+            {
+                return Ok(salesPercentages);
+            }
+
+            salesPercentages = await _mediator.Send(new GetSalesPercentagesQuery(filter));
+
+            _memoryCache.Set(CacheKeys.SalesPercentages, salesPercentages, MemoryCacheOptions);
 
             return Ok(salesPercentages);
         }
+
+        private MemoryCacheEntryOptions MemoryCacheOptions => new MemoryCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTime.UtcNow.AddMinutes(60),
+            Priority = CacheItemPriority.High,
+            SlidingExpiration = TimeSpan.FromMinutes(30)
+        };
     }
 }
