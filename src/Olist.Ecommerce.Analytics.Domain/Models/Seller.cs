@@ -2,9 +2,6 @@
 {
     public class Seller
     {
-        public string Id { get; set; }
-        public string ZipCodePrefix { get; set; }
-        public string City { get; set; }
-        public string State { get; set; }
+        public string SellerId { get; set; }
     }
 }
