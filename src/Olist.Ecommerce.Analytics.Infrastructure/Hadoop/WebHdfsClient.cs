@@ -22,21 +22,21 @@ namespace Olist.Ecommerce.Analytics.Infrastructure.Hadoop
 
         public async Task<T> OpenAndReadFileAsync<T>(string path) where T : class, new()
         {
-            string uri = $"/webhdfs/v1/{path}?op={HdfsOperations.OPEN_AND_READ}";
+            string uri = $"/webhdfs/v1/{path}?op={HdfsOperations.OpenAndRead}";
 
             return await _httpClient.GetFromJsonAsync<T>(uri);
         }
 
         public async Task<string> FileOrDirectoryStatusAsync(string path)
         {
-            string uri = $"/webhdfs/v1/{path}?op={HdfsOperations.FILE_OR_DIRECTORY_STATUS}";
+            string uri = $"/webhdfs/v1/{path}?op={HdfsOperations.FileOrDirectoryStatus}";
 
             return await _httpClient.GetStringAsync(uri);
         }
 
         public async Task<string> ListDirectoryAsync(string path)
         {
-            string uri = $"/webhdfs/v1/{path}?op={HdfsOperations.LIST_DIRECTORY}";
+            string uri = $"/webhdfs/v1/{path}?op={HdfsOperations.ListDirectory}";
 
             return await _httpClient.GetStringAsync(uri);
         }

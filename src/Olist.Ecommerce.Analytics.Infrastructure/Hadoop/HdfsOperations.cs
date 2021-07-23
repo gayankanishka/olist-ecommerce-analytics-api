@@ -1,9 +1,9 @@
 ﻿namespace Olist.Ecommerce.Analytics.Infrastructure.Hadoop
 {
-    public class HdfsOperations
+    public static class HdfsOperations
     {
-        public const string OPEN_AND_READ = "OPEN";
-        public const string FILE_OR_DIRECTORY_STATUS = "GETFILESTATUS";
-        public const string LIST_DIRECTORY = "LISTSTATUS";
+        public static string OpenAndRead => "OPEN";
+        public static string FileOrDirectoryStatus => "GETFILESTATUS";
+        public static string ListDirectory => "LISTSTATUS";
     }
 }
