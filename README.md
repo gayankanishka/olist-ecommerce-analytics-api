@@ -7,7 +7,7 @@
 
 What's included:
 
-- Prototype of a serverless notification framework
+- 
 
 ## Table of Content
 
