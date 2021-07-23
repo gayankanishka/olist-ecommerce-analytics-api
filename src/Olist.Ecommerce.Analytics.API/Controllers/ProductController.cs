@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocationsMostSellingProducts;
-using Olist.Ecommerce.Analytics.Application.Products.GetMostSoldUsingCreditCardsProducts;
+using Olist.Ecommerce.Analytics.Application.Products.GetMostSoldProductsUsingCreditCards;
 using Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages;
 using Olist.Ecommerce.Analytics.Domain.Enums;
 using Olist.Ecommerce.Analytics.Domain.Models;
@@ -61,10 +61,10 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<Product>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetMostSoldUsingCreditCardsProductsAsync()
+        public async Task<IActionResult> GetMostSoldProductsUsingCreditCardsAsync()
         {
             IEnumerable<Product> products = await _mediator.Send(
-                new GetMostSoldUsingCreditCardsProductsQuery());
+                new GetMostSoldProductsUsingCreditCardsQuery());
 
             return Ok(products);
         }

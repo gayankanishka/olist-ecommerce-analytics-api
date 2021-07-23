@@ -6,21 +6,21 @@ using Microsoft.Extensions.Configuration;
 using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
 using Olist.Ecommerce.Analytics.Domain.Models;
 
-namespace Olist.Ecommerce.Analytics.Application.Products.GetMostSoldUsingCreditCardsProducts
+namespace Olist.Ecommerce.Analytics.Application.Products.GetMostSoldProductsUsingCreditCards
 {
-    public class GetMostSoldUsingCreditCardsProductsQueryHandler :
-        IRequestHandler<GetMostSoldUsingCreditCardsProductsQuery, IEnumerable<Product>>
+    public class GetMostSoldProductsUsingCreditCardsQueryHandler :
+        IRequestHandler<GetMostSoldProductsUsingCreditCardsQuery, IEnumerable<Product>>
     {
         private readonly IWebHdfsClient _webHdfsClient;
         private readonly IConfiguration _configuration;
 
-        public GetMostSoldUsingCreditCardsProductsQueryHandler(IWebHdfsClient webHdfsClient, IConfiguration configuration)
+        public GetMostSoldProductsUsingCreditCardsQueryHandler(IWebHdfsClient webHdfsClient, IConfiguration configuration)
         {
             _webHdfsClient = webHdfsClient;
             _configuration = configuration;
         }
 
-        public async Task<IEnumerable<Product>> Handle(GetMostSoldUsingCreditCardsProductsQuery request,
+        public async Task<IEnumerable<Product>> Handle(GetMostSoldProductsUsingCreditCardsQuery request,
             CancellationToken cancellationToken)
         {
             string filePath = _configuration.GetSection("HiveFiles")
