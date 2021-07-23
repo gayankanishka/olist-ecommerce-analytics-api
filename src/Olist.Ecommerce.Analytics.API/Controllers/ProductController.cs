@@ -3,16 +3,16 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Olist.Ecommerce.Analytics.Application.Products.GetFastMovingProducts;
+using Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocationsMostSellingProducts;
+using Olist.Ecommerce.Analytics.Application.Products.GetMostSoldUsingCreditCardsProducts;
 using Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages;
-using Olist.Ecommerce.Analytics.Application.Products.GetSlowMovingProducts;
 using Olist.Ecommerce.Analytics.Domain.Enums;
 using Olist.Ecommerce.Analytics.Domain.Models;
 
 namespace Olist.Ecommerce.Analytics.API.Controllers
 {
     /// <summary>
-    /// Handles Products related analytics operations.
+    /// Handles Product related analytics operations.
     /// </summary>
     [Route("api/products")]
     [ApiController]
@@ -30,47 +30,41 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         }
 
         /// <summary>
-        /// Get fast selling products.
+        /// Get least revenue locations most selling products.
         /// </summary>
-        /// <returns>A list of fast selling products.</returns>
-        /// <response code="200">Fast selling products list.</response>
-        /// <response code="400">If invalid payload is passed</response>
-        /// <response code="500">If something went wrong in the server-end</response>
-        [Route("fast-moving")]
+        /// <returns>A list of most selling products in least revenue locations.</returns>
+        /// <response code="200">Most selling products.</response>
+        /// <response code="400">If invalid payload is passed.</response>
+        /// <response code="500">If something went wrong in the server-end.</response>
+        [Route("least-revenue-locations-most-selling")]
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<Product>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetFastMovingProductsAsync()
+        public async Task<IActionResult> GetLeastRevenueLocationsMostSellingProductsAsync()
         {
-            IEnumerable<Product> products = await _mediator.Send(
-                new GetFastMovingProductsQuery());
+            IEnumerable<LeastRevenueLocationsMostSellingProductsDto> products = 
+                await _mediator.Send(new GetLeastRevenueLocationsMostSellingProductsQuery());
 
             return Ok(products);
         }
 
         /// <summary>
-        /// Get slow selling products.
+        /// Get most sold products using credit cards.
         /// </summary>
-        /// <param name="locationId">The ID of the seller location.</param>
-        /// <returns>A list of slow selling products along with users.</returns>
-        /// <response code="200">Slow selling products list.</response>
+        /// <returns>A list of products.</returns>
+        /// <response code="200">Products list.</response>
         /// <response code="400">If invalid payload is passed.</response>
         /// <response code="500">If something went wrong in the server-end.</response>
-        [Route("{locationId}/slow-moving")]
+        [Route("most-sold-using-credit-cards")]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Product>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetSlowMovingProductsAsync([FromRoute] string locationId)
+        public async Task<IActionResult> GetMostSoldUsingCreditCardsProductsAsync()
         {
-            if (string.IsNullOrWhiteSpace(locationId))
-            {
-                return BadRequest("LocationId required!");
-            }
-
             IEnumerable<Product> products = await _mediator.Send(
-                new GetSlowMovingProductsQuery(locationId));
+                new GetMostSoldUsingCreditCardsProductsQuery());
 
             return Ok(products);
         }
