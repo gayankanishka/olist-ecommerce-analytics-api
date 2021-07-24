@@ -4,7 +4,7 @@ namespace Olist.Ecommerce.Analytics.Application.Sellers.GetMostPopularSellers
 {
     public class MostPopularSellerDto
     {
-        public Product Product { get; set; }
-        public Seller Seller { get; set; }
+        public string ProductId { get; set; }
+        public string SellerId { get; set; }
     }
 }

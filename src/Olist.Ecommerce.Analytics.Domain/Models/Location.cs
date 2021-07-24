@@ -4,5 +4,6 @@
     {
         public string City { get; set; }
         public double Revenue { get; set; }
+        public int Rank { get; set; }
     }
 }

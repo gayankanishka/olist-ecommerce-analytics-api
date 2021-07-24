@@ -2,8 +2,9 @@
 {
     public class SalesPercentage
     {
-        public Product Product { get; set; }
-        public double Value { get; set; }
+        public string ProductId { get; set; }
+        public string CategoryName { get; set; }
+        public double Percentage { get; set; }
         public double SalesAmount { get; set; }
     }
 }

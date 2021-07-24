@@ -4,8 +4,9 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocation
 {
     public class LeastRevenueLocationsMostSellingProductsDto
     {
-        public Product Product { get; set; }
+        public string ProductId { get; set; }
         public string State { get; set; }
         public int RankWithinState { get; set; }
+        public float SalesPerProduct { get; set; }
     }
 }
