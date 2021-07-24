@@ -20,7 +20,7 @@ namespace Olist.Ecommerce.Analytics.Infrastructure.Hadoop
             SetDefaultHeaders();
         }
 
-        public async Task<T> OpenAndReadFileAsync<T>(string path) where T : class, new()
+        public async Task<T> OpenAndReadFileAsync<T>(string path)
         {
             string uri = $"/webhdfs/v1/{path}?op={HdfsOperations.OpenAndRead}";
 
