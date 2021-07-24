@@ -43,7 +43,6 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         /// <response code="400">If invalid payload is passed.</response>
         /// <response code="500">If something went wrong in the server-end.</response>
         [Route("least-revenue-locations-most-selling")]
-        [ResponseCache(Duration = 600)]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<LeastRevenueLocationsMostSellingProductsDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -71,7 +70,6 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         /// <response code="400">If invalid payload is passed.</response>
         /// <response code="500">If something went wrong in the server-end.</response>
         [Route("most-sold-using-credit-cards")]
-        [ResponseCache(Duration = 600)]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Product>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -99,7 +97,6 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         /// <response code="400">If invalid payload is passed.</response>
         /// <response code="500">If something went wrong in the server-end.</response>
         [Route("sales-percentages")]
-        [ResponseCache(Duration = 600)]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<SalesPercentage>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

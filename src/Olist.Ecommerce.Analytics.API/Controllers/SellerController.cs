@@ -39,7 +39,6 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         /// <response code="400">If invalid payload is passed</response>
         /// <response code="500">If something went wrong in the server-end</response>
         [Route("most-popular")]
-        [ResponseCache(Duration = 600)]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<MostPopularSellerDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
