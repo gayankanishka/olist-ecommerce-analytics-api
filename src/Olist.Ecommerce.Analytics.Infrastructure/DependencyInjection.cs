@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
+using Olist.Ecommerce.Analytics.Infrastructure.Cloud.Blobs;
 using Olist.Ecommerce.Analytics.Infrastructure.Hadoop;
 
 namespace Olist.Ecommerce.Analytics.Infrastructure
@@ -19,6 +20,8 @@ namespace Olist.Ecommerce.Analytics.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IWebHdfsClient, WebHdfsClient>();
+            services.AddScoped<IAnalyzerResultsBlobStorage, AnalyzerResultsBlobStorage>(_ =>
+                new AnalyzerResultsBlobStorage(configuration.GetConnectionString("AzureStorageAccount")));
 
             services.AddHttpClient<IWebHdfsClient, WebHdfsClient>();
 
