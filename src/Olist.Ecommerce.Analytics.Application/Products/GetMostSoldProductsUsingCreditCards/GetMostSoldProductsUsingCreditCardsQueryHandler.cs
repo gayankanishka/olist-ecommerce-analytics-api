@@ -12,12 +12,12 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetMostSoldProductsUsin
     public class GetMostSoldProductsUsingCreditCardsQueryHandler :
         IRequestHandler<GetMostSoldProductsUsingCreditCardsQuery, IEnumerable<Product>>
     {
-        private readonly IWebHdfsClient _webHdfsClient;
+        private readonly IAnalyzerResultsBlobStorage _analyzerResultsBlobStorage;
         private readonly IConfiguration _configuration;
 
-        public GetMostSoldProductsUsingCreditCardsQueryHandler(IWebHdfsClient webHdfsClient, IConfiguration configuration)
+        public GetMostSoldProductsUsingCreditCardsQueryHandler(IAnalyzerResultsBlobStorage analyzerResultsBlobStorage, IConfiguration configuration)
         {
-            _webHdfsClient = webHdfsClient;
+            _analyzerResultsBlobStorage = analyzerResultsBlobStorage;
             _configuration = configuration;
         }
 
@@ -28,10 +28,7 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetMostSoldProductsUsin
                 .GetSection("MostSoldProductsUsingCreditCards")
                 .Value;
 
-            string result =
-                "9ef432eb6251297304e76186b10a928d\tsp\t20\nb0830fb4747a6c6d20dea0b8c802d7ef\tca\t200\n41ce2a54c0b03bf3443c3d931a367089\tla\t3000\n";
-
-            // string result = await _webHdfsClient.OpenAndReadFileAsync<string>(filePath);
+            string result = await _analyzerResultsBlobStorage.DownloadAndReadBlobAsync(filePath);
 
             if (string.IsNullOrWhiteSpace(result))
             {

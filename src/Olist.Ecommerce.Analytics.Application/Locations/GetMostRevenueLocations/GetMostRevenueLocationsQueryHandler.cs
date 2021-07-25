@@ -12,12 +12,12 @@ namespace Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocation
     public class GetMostRevenueLocationsQueryHandler :
         IRequestHandler<GetMostRevenueLocationsQuery, IEnumerable<Location>>
     {
-        private readonly IWebHdfsClient _webHdfsClient;
+        private readonly IAnalyzerResultsBlobStorage _analyzerResultsBlobStorage;
         private readonly IConfiguration _configuration;
 
-        public GetMostRevenueLocationsQueryHandler(IWebHdfsClient webHdfsClient, IConfiguration configuration)
+        public GetMostRevenueLocationsQueryHandler(IAnalyzerResultsBlobStorage analyzerResultsBlobStorage, IConfiguration configuration)
         {
-            _webHdfsClient = webHdfsClient;
+            _analyzerResultsBlobStorage = analyzerResultsBlobStorage;
             _configuration = configuration;
         }
 
@@ -28,10 +28,7 @@ namespace Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocation
                 .GetSection("MostRevenueLocations")
                 .Value;
 
-            string result =
-                "9ef432eb6251297304e76186b10a928d\t3\t1252\nb0830fb4747a6c6d20dea0b8c802d7ef\t2\t1254\n41ce2a54c0b03bf3443c3d931a367089\t1\t1545";
-
-            //string result = await _webHdfsClient.OpenAndReadFileAsync<string>(filePath);
+            string result = await _analyzerResultsBlobStorage.DownloadAndReadBlobAsync(filePath);
 
             if (string.IsNullOrWhiteSpace(result))
             {

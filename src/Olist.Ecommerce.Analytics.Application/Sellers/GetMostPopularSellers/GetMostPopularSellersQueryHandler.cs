@@ -11,12 +11,12 @@ namespace Olist.Ecommerce.Analytics.Application.Sellers.GetMostPopularSellers
     public class GetMostPopularSellersQueryHandler : 
         IRequestHandler<GetMostPopularSellersQuery, IEnumerable<MostPopularSellerDto>>
     {
-        private readonly IWebHdfsClient _webHdfsClient;
+        private readonly IAnalyzerResultsBlobStorage _analyzerResultsBlobStorage;
         private readonly IConfiguration _configuration;
 
-        public GetMostPopularSellersQueryHandler(IWebHdfsClient webHdfsClient, IConfiguration configuration)
+        public GetMostPopularSellersQueryHandler(IAnalyzerResultsBlobStorage analyzerResultsBlobStorage, IConfiguration configuration)
         {
-            _webHdfsClient = webHdfsClient;
+            _analyzerResultsBlobStorage = analyzerResultsBlobStorage;
             _configuration = configuration;
         }
 
@@ -27,10 +27,7 @@ namespace Olist.Ecommerce.Analytics.Application.Sellers.GetMostPopularSellers
                 .GetSection("MostPopularSellers")
                 .Value;
 
-            string result =
-                "9ef432eb6251297304e76186b10a928d\t31ad1d1b63eb9962463f764d4e6e0c9d\nb0830fb4747a6c6d20dea0b8c802d7ef\tf54a9f0e6b351c431402b8461ea51999\n41ce2a54c0b03bf3443c3d931a367089\t9bdf08b4b3b52b5526ff42d37d47f222";
-
-            // string result = await _webHdfsClient.OpenAndReadFileAsync<string>(filePath);
+            string result = await _analyzerResultsBlobStorage.DownloadAndReadBlobAsync(filePath);
 
             if (string.IsNullOrWhiteSpace(result))
             {

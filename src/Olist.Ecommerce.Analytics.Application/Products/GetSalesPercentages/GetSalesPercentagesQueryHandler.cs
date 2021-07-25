@@ -12,12 +12,12 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages
     public class GetSalesPercentagesQueryHandler :
         IRequestHandler<GetSalesPercentagesQuery, IEnumerable<SalesPercentage>>
     {
-        private readonly IWebHdfsClient _webHdfsClient;
+        private readonly IAnalyzerResultsBlobStorage _analyzerResultsBlobStorage;
         private readonly IConfiguration _configuration;
 
-        public GetSalesPercentagesQueryHandler(IWebHdfsClient webHdfsClient, IConfiguration configuration)
+        public GetSalesPercentagesQueryHandler(IAnalyzerResultsBlobStorage analyzerResultsBlobStorage, IConfiguration configuration)
         {
-            _webHdfsClient = webHdfsClient;
+            _analyzerResultsBlobStorage = analyzerResultsBlobStorage;
             _configuration = configuration;
         }
 
@@ -28,10 +28,7 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages
                 .GetSection("SalesPercentages")
                 .Value;
 
-            string result =
-                "9ef432eb6251297304e76186b10a928d\tsp\t20.3\t1254\nb0830fb4747a6c6d20dea0b8c802d7ef\tca\t20.59\t4587\n41ce2a54c0b03bf3443c3d931a367089\tla\t60\t965\n";
-
-            // string result = await _webHdfsClient.OpenAndReadFileAsync<string>(filePath);
+            string result = await _analyzerResultsBlobStorage.DownloadAndReadBlobAsync(filePath);
 
             if (string.IsNullOrWhiteSpace(result))
             {
