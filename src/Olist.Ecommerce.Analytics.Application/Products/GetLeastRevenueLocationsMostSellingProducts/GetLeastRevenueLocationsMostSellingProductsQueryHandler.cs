@@ -11,24 +11,24 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocation
     public class GetLeastRevenueLocationsMostSellingProductsQueryHandler :
         IRequestHandler<GetLeastRevenueLocationsMostSellingProductsQuery, IEnumerable<LeastRevenueLocationsMostSellingProductsDto>>
     {
-        private readonly IAnalyzerResultsBlobStorage _analyzerResultsBlobStorage;
+        private readonly IAnalyzerBlobStorage _analyzerBlobStorage;
         private readonly IConfiguration _configuration;
 
-        public GetLeastRevenueLocationsMostSellingProductsQueryHandler(IAnalyzerResultsBlobStorage analyzerResultsBlobStorage,
+        public GetLeastRevenueLocationsMostSellingProductsQueryHandler(IAnalyzerBlobStorage analyzerBlobStorage,
             IConfiguration configuration)
         {
-            _analyzerResultsBlobStorage = analyzerResultsBlobStorage;
+            _analyzerBlobStorage = analyzerBlobStorage;
             _configuration = configuration;
         }
 
         public async Task<IEnumerable<LeastRevenueLocationsMostSellingProductsDto>> Handle(GetLeastRevenueLocationsMostSellingProductsQuery request,
             CancellationToken cancellationToken)
         {
-            string filePath = _configuration.GetSection("HiveFiles")
+            string filePath = _configuration.GetSection("AnalyzerBlobStorage")
                 .GetSection("LeastRevenueLocationsMostSellingProducts")
                 .Value;
 
-            string result = await _analyzerResultsBlobStorage.DownloadAndReadBlobAsync(filePath);
+            string result = await _analyzerBlobStorage.DownloadAndReadBlobAsync(filePath);
 
             if (string.IsNullOrWhiteSpace(result))
             {

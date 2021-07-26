@@ -20,8 +20,9 @@ namespace Olist.Ecommerce.Analytics.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IWebHdfsClient, WebHdfsClient>();
-            services.AddScoped<IAnalyzerResultsBlobStorage, AnalyzerResultsBlobStorage>(_ =>
-                new AnalyzerResultsBlobStorage(configuration.GetConnectionString("AzureStorageAccount")));
+            services.AddScoped<IAnalyzerBlobStorage, CloudBlobStorage>(_ =>
+                new CloudBlobStorage(configuration.GetConnectionString("AzureStorageAccount"),
+                    configuration.GetSection("AnalyzerBlobStorage").GetSection("ContainerName").Value));
 
             services.AddHttpClient<IWebHdfsClient, WebHdfsClient>();
 

@@ -6,16 +6,13 @@ using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
 
 namespace Olist.Ecommerce.Analytics.Infrastructure.Cloud.Blobs
 {
-    public class AnalyzerResultsBlobStorage : IAnalyzerResultsBlobStorage
+    public class CloudBlobStorage : IAnalyzerBlobStorage
     {
-        private const string CONTAINER_NAME = "olist-analyzer-results";
-
         private readonly BlobContainerClient _blobContainerClient;
 
-        public AnalyzerResultsBlobStorage(string connectionString)
+        public CloudBlobStorage(string connectionString, string containerName)
         {
-            _blobContainerClient = new BlobContainerClient(connectionString, CONTAINER_NAME);
-            _blobContainerClient.CreateIfNotExists(PublicAccessType.BlobContainer);
+            _blobContainerClient = new BlobContainerClient(connectionString, containerName);
         }
 
         public async Task<string> DownloadAndReadBlobAsync(string pathAndFileName)

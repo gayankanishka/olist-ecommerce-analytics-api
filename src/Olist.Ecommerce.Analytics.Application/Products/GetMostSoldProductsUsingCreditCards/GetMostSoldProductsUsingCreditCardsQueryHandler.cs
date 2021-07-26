@@ -12,23 +12,23 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetMostSoldProductsUsin
     public class GetMostSoldProductsUsingCreditCardsQueryHandler :
         IRequestHandler<GetMostSoldProductsUsingCreditCardsQuery, IEnumerable<Product>>
     {
-        private readonly IAnalyzerResultsBlobStorage _analyzerResultsBlobStorage;
+        private readonly IAnalyzerBlobStorage _analyzerBlobStorage;
         private readonly IConfiguration _configuration;
 
-        public GetMostSoldProductsUsingCreditCardsQueryHandler(IAnalyzerResultsBlobStorage analyzerResultsBlobStorage, IConfiguration configuration)
+        public GetMostSoldProductsUsingCreditCardsQueryHandler(IAnalyzerBlobStorage analyzerBlobStorage, IConfiguration configuration)
         {
-            _analyzerResultsBlobStorage = analyzerResultsBlobStorage;
+            _analyzerBlobStorage = analyzerBlobStorage;
             _configuration = configuration;
         }
 
         public async Task<IEnumerable<Product>> Handle(GetMostSoldProductsUsingCreditCardsQuery request,
             CancellationToken cancellationToken)
         {
-            string filePath = _configuration.GetSection("HiveFiles")
+            string filePath = _configuration.GetSection("AnalyzerBlobStorage")
                 .GetSection("MostSoldProductsUsingCreditCards")
                 .Value;
 
-            string result = await _analyzerResultsBlobStorage.DownloadAndReadBlobAsync(filePath);
+            string result = await _analyzerBlobStorage.DownloadAndReadBlobAsync(filePath);
 
             if (string.IsNullOrWhiteSpace(result))
             {

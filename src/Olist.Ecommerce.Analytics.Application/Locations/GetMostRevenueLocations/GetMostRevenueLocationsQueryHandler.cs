@@ -12,23 +12,23 @@ namespace Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocation
     public class GetMostRevenueLocationsQueryHandler :
         IRequestHandler<GetMostRevenueLocationsQuery, IEnumerable<Location>>
     {
-        private readonly IAnalyzerResultsBlobStorage _analyzerResultsBlobStorage;
+        private readonly IAnalyzerBlobStorage _analyzerBlobStorage;
         private readonly IConfiguration _configuration;
 
-        public GetMostRevenueLocationsQueryHandler(IAnalyzerResultsBlobStorage analyzerResultsBlobStorage, IConfiguration configuration)
+        public GetMostRevenueLocationsQueryHandler(IAnalyzerBlobStorage analyzerBlobStorage, IConfiguration configuration)
         {
-            _analyzerResultsBlobStorage = analyzerResultsBlobStorage;
+            _analyzerBlobStorage = analyzerBlobStorage;
             _configuration = configuration;
         }
 
         public async Task<IEnumerable<Location>> Handle(GetMostRevenueLocationsQuery request,
             CancellationToken cancellationToken)
         {
-            string filePath = _configuration.GetSection("HiveFiles")
+            string filePath = _configuration.GetSection("AnalyzerBlobStorage")
                 .GetSection("MostRevenueLocations")
                 .Value;
 
-            string result = await _analyzerResultsBlobStorage.DownloadAndReadBlobAsync(filePath);
+            string result = await _analyzerBlobStorage.DownloadAndReadBlobAsync(filePath);
 
             if (string.IsNullOrWhiteSpace(result))
             {

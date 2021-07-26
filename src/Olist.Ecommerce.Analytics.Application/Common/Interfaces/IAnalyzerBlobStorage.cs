@@ -2,7 +2,7 @@
 
 namespace Olist.Ecommerce.Analytics.Application.Common.Interfaces
 {
-    public interface IAnalyzerResultsBlobStorage
+    public interface IAnalyzerBlobStorage
     {
         Task<string> DownloadAndReadBlobAsync(string path);
     }
