@@ -53,7 +53,7 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages
                         };
                     })
                     .ToList()
-                    .OrderBy(_ => _.Percentage);
+                    .OrderByDescending(_ => _.Percentage);
             }
 
             return new List<SalesPercentage>();

@@ -52,7 +52,7 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetMostSoldProductsUsin
                         };
                     })
                     .ToList()
-                    .OrderBy(_ => _.Count);
+                    .OrderByDescending(_ => _.Count);
             }
 
             return new List<Product>();
