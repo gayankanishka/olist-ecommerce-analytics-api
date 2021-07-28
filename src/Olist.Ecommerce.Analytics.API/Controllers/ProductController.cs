@@ -9,7 +9,6 @@ using Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocationsMos
 using Olist.Ecommerce.Analytics.Application.Products.GetMostSoldProductsUsingCreditCards;
 using Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages;
 using Olist.Ecommerce.Analytics.Domain.Constants;
-using Olist.Ecommerce.Analytics.Domain.Enums;
 using Olist.Ecommerce.Analytics.Domain.Models;
 
 namespace Olist.Ecommerce.Analytics.API.Controllers
@@ -91,7 +90,6 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         /// <summary>
         /// Get sales percentages.
         /// </summary>
-        /// <param name="filter">The <see cref="DateFilters"/> used to get relevant data.</param>
         /// <returns>A list of categories with sales percentages.</returns>
         /// <response code="200">Sales percentages list.</response>
         /// <response code="400">If invalid payload is passed.</response>
@@ -101,14 +99,14 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<SalesPercentage>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetSalesPercentagesAsync([FromQuery] DateFilters filter)
+        public async Task<IActionResult> GetSalesPercentagesAsync()
         {
             if (_memoryCache.TryGetValue(CacheKeys.SalesPercentages, out IEnumerable<SalesPercentage> salesPercentages))
             {
                 return Ok(salesPercentages);
             }
 
-            salesPercentages = await _mediator.Send(new GetSalesPercentagesQuery(filter));
+            salesPercentages = await _mediator.Send(new GetSalesPercentagesQuery());
 
             _memoryCache.Set(CacheKeys.SalesPercentages, salesPercentages, MemoryCacheOptions);
 
