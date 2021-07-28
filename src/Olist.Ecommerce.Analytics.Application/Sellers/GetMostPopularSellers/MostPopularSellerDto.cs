@@ -1,6 +1,4 @@
-﻿using Olist.Ecommerce.Analytics.Domain.Models;
-
-namespace Olist.Ecommerce.Analytics.Application.Sellers.GetMostPopularSellers
+﻿namespace Olist.Ecommerce.Analytics.Application.Sellers.GetMostPopularSellers
 {
     public class MostPopularSellerDto
     {

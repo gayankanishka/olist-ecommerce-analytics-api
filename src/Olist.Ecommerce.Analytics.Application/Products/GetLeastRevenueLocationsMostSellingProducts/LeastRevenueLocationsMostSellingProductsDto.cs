@@ -1,6 +1,4 @@
-﻿using Olist.Ecommerce.Analytics.Domain.Models;
-
-namespace Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocationsMostSellingProducts
+﻿namespace Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocationsMostSellingProducts
 {
     public class LeastRevenueLocationsMostSellingProductsDto
     {
