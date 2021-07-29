@@ -1,10 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure;
+using CsvHelper;
+using CsvHelper.Configuration;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
+using Olist.Ecommerce.Analytics.Domain.Mappings;
 using Olist.Ecommerce.Analytics.Domain.Models;
 
 namespace Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocations
@@ -24,38 +32,50 @@ namespace Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocation
         public async Task<IEnumerable<Location>> Handle(GetMostRevenueLocationsQuery request,
             CancellationToken cancellationToken)
         {
-            string filePath = _configuration.GetSection("AnalyzerBlobStorage")
+            // TODO: Refactor all handlers
+            
+            string blobFilePath = _configuration.GetSection("AnalyzerBlobStorage")
                 .GetSection("MostRevenueLocations")
                 .Value;
 
-            string result = await _analyzerBlobStorage.DownloadAndReadBlobAsync(filePath);
+            string localFilePath = $"{Path.GetTempPath()}/{blobFilePath}";
 
-            if (string.IsNullOrWhiteSpace(result))
+            Response result = 
+                await _analyzerBlobStorage.DownloadBlobAsync(localFilePath, blobFilePath);
+
+            if (result.Status != (int) HttpStatusCode.PartialContent)
             {
                 return new List<Location>();
             }
-
-            IEnumerable<string> rows = result.Split('\n');
-
-            if (rows.Any())
+            
+            CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                return rows
-                    .Where(row => !string.IsNullOrWhiteSpace(row))
-                    .Select(row => row.Split('\t'))
-                    .Select(columns =>
-                    {
-                        return new Location
-                        {
-                            City = columns[0],
-                            Rank = int.Parse(columns[1]),
-                            Revenue = double.Parse(columns[2])
-                        };
-                    })
-                    .ToList()
-                    .OrderBy(_ => _.Rank);
-            }
+                HasHeaderRecord = false,
+                Delimiter = "\t",
+                MissingFieldFound = null,
+                TrimOptions = TrimOptions.Trim
+            };
 
-            return new List<Location>();
+            using StreamReader reader = new StreamReader(localFilePath);
+            using CsvReader csv = new CsvReader(reader, config);
+            
+            csv.Context.RegisterClassMap<LocationMap>();
+
+            int rank = 1;
+            
+            return csv.GetRecords<Location>()
+                .Select(_ =>
+                {
+                    _.Revenue = Math.Round(_.Revenue, 2);
+                    return _;
+                })
+                .OrderByDescending(_ => _.Revenue)
+                .Select(_ =>
+                {
+                    _.Rank += rank++;
+                    return _;
+                })
+                .ToList();
         }
     }
 }
