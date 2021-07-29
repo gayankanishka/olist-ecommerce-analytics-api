@@ -47,7 +47,6 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetMostSoldProductsUsin
             CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false,
-                Delimiter = "\t",
                 MissingFieldFound = null,
                 TrimOptions = TrimOptions.Trim,
                 BadDataFound = null

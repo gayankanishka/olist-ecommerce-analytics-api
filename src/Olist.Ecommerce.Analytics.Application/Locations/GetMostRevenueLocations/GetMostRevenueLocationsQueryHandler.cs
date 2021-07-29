@@ -51,7 +51,6 @@ namespace Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocation
             CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = false,
-                Delimiter = "\t",
                 MissingFieldFound = null,
                 TrimOptions = TrimOptions.Trim,
                 BadDataFound = null
