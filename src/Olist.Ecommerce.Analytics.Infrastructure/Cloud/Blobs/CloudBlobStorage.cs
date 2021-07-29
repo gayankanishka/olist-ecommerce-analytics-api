@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Threading.Tasks;
+using Azure;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
@@ -29,6 +30,14 @@ namespace Olist.Ecommerce.Analytics.Infrastructure.Cloud.Blobs
             await download.Content.ReadAsync(result, 0, (int)download.ContentLength);
  
             return Encoding.UTF8.GetString(result);
+        }
+
+        public async Task<Response> DownloadBlobAsync(string localFilePath, string blobFilePath)
+        {
+            BlobClient blobClient = _blobContainerClient.GetBlobClient(blobFilePath);
+            // string downloadFilePath = localFilePath.Replace(".csv", $"{pathAndFileName}.csv");
+            
+            return await blobClient.DownloadToAsync(localFilePath);
         }
     }
 }
