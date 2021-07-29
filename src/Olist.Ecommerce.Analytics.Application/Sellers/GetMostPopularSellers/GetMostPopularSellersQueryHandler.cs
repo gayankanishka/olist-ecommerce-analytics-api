@@ -1,7 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure;
+using CsvHelper;
+using CsvHelper.Configuration;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
@@ -23,36 +29,33 @@ namespace Olist.Ecommerce.Analytics.Application.Sellers.GetMostPopularSellers
         public async Task<IEnumerable<MostPopularSellerDto>> Handle(GetMostPopularSellersQuery request,
             CancellationToken cancellationToken)
         {
-            string filePath = _configuration.GetSection("AnalyzerBlobStorage")
+            string blobFilePath = _configuration.GetSection("AnalyzerBlobStorage")
                 .GetSection("MostPopularSellers")
                 .Value;
 
-            string result = await _analyzerBlobStorage.DownloadAndReadBlobAsync(filePath);
+            string localFilePath = $"{Path.GetTempPath()}/{blobFilePath}";
 
-            if (string.IsNullOrWhiteSpace(result))
+            Response result = 
+                await _analyzerBlobStorage.DownloadBlobAsync(localFilePath, blobFilePath);
+
+            if (result.Status != (int) HttpStatusCode.PartialContent)
             {
                 return new List<MostPopularSellerDto>();
             }
-
-            IEnumerable<string> rows = result.Split('\n');
-
-            if (rows.Any())
+            
+            CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                return rows
-                    .Where(row => !string.IsNullOrWhiteSpace(row))
-                    .Select(row => row.Split('\t'))
-                    .Select(columns =>
-                    {
-                        return new MostPopularSellerDto()
-                        {
-                            ProductId = columns[0],
-                            SellerId = columns[1]
-                        };
-                    })
-                    .ToList();
-            }
+                HasHeaderRecord = false,
+                Delimiter = "\t",
+                MissingFieldFound = null,
+                TrimOptions = TrimOptions.Trim,
+                BadDataFound = null
+            };
 
-            return new List<MostPopularSellerDto>();
+            using StreamReader reader = new StreamReader(localFilePath);
+            using CsvReader csv = new CsvReader(reader, config);
+            
+            return csv.GetRecords<MostPopularSellerDto>().ToList();
         }
     }
 }
