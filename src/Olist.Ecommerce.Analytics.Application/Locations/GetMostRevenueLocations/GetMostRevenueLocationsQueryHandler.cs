@@ -53,7 +53,8 @@ namespace Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocation
                 HasHeaderRecord = false,
                 Delimiter = "\t",
                 MissingFieldFound = null,
-                TrimOptions = TrimOptions.Trim
+                TrimOptions = TrimOptions.Trim,
+                BadDataFound = null
             };
 
             using StreamReader reader = new StreamReader(localFilePath);

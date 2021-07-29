@@ -1,7 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure;
+using CsvHelper;
+using CsvHelper.Configuration;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
@@ -24,39 +31,41 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages
         public async Task<IEnumerable<SalesPercentage>> Handle(GetSalesPercentagesQuery request,
             CancellationToken cancellationToken)
         {
-            string filePath = _configuration.GetSection("AnalyzerBlobStorage")
+            string blobFilePath = _configuration.GetSection("AnalyzerBlobStorage")
                 .GetSection("SalesPercentages")
                 .Value;
 
-            string result = await _analyzerBlobStorage.DownloadAndReadBlobAsync(filePath);
+            string localFilePath = $"{Path.GetTempPath()}/{blobFilePath}";
 
-            if (string.IsNullOrWhiteSpace(result))
+            Response result = 
+                await _analyzerBlobStorage.DownloadBlobAsync(localFilePath, blobFilePath);
+
+            if (result.Status != (int) HttpStatusCode.PartialContent)
             {
                 return new List<SalesPercentage>();
             }
-
-            IEnumerable<string> rows = result.Split('\n');
-
-            if (rows.Any())
+            
+            CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                return rows
-                    .Where(row => !string.IsNullOrWhiteSpace(row))
-                    .Select(row => row.Split('\t'))
-                    .Select(columns =>
-                    {
-                        return new SalesPercentage()
-                        {
-                            ProductId = columns[0],
-                            CategoryName = columns[1],
-                            Percentage = double.Parse(columns[2]),
-                            SalesAmount = double.Parse(columns[3])
-                        };
-                    })
-                    .ToList()
-                    .OrderByDescending(_ => _.Percentage);
-            }
+                HasHeaderRecord = false,
+                Delimiter = "\t",
+                MissingFieldFound = null,
+                TrimOptions = TrimOptions.Trim,
+                BadDataFound = null
+            };
 
-            return new List<SalesPercentage>();
+            using StreamReader reader = new StreamReader(localFilePath);
+            using CsvReader csv = new CsvReader(reader, config);
+            
+            return csv.GetRecords<SalesPercentage>()
+                .Select(_ =>
+                {
+                    _.Percentage = Math.Round(_.Percentage, 2);
+                    _.SalesAmount = Math.Round(_.SalesAmount, 2);
+                    return _;
+                })
+                .OrderByDescending(_ => _.Percentage)
+                .ToList();
         }
     }
 }
