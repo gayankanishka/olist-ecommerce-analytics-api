@@ -20,7 +20,7 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IMemoryCache _memoryCache;
-
+        
         /// <summary>
         /// Constructor of LocationController.
         /// </summary>
@@ -37,12 +37,10 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         /// </summary>
         /// <returns>A list of most revenue generated locations.</returns>
         /// <response code="200">Most revenue generated locations list.</response>
-        /// <response code="400">If invalid payload is passed</response>
         /// <response code="500">If something went wrong in the server-end</response>
         [Route("most-revenue")]
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Location>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetMostRevenueLocationsAsync()
         {

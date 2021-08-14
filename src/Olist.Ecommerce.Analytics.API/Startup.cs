@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Olist.Ecommerce.Analytics.Application;
+using Olist.Ecommerce.Analytics.Application.Common.Exceptions;
 using Olist.Ecommerce.Analytics.Infrastructure;
 
 namespace Olist.Ecommerce.Analytics.API
@@ -50,7 +51,11 @@ namespace Olist.Ecommerce.Analytics.API
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            else
+            {
+                app.ConfigureExceptionHandler();
+            }
+            
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Olist.Ecommerce.Analytics.API v1"));
 
