@@ -30,7 +30,7 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status404NotFound)]
-        public IActionResult ClearMemoryCacheAsync()
+        public IActionResult ClearMemoryCache()
         {
             if (_memoryCache is not MemoryCache memoryCache)
             {

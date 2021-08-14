@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +15,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Olist.Ecommerce.Analytics.Application\Olist.Ecommerce.Analytics.Application.csproj" />
     <ProjectReference Include="..\Olist.Ecommerce.Analytics.Domain\Olist.Ecommerce.Analytics.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Caching" />
   </ItemGroup>
 
 </Project>
