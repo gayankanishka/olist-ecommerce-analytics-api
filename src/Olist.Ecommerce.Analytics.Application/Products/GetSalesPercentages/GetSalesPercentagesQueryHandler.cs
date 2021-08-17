@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure;
-using CsvHelper;
-using CsvHelper.Configuration;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
@@ -21,50 +18,34 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages
     {
         private readonly IAnalyzerBlobStorage _analyzerBlobStorage;
         private readonly IConfiguration _configuration;
+        private readonly ICsvMaterializer _csvMaterializer;
 
-        public GetSalesPercentagesQueryHandler(IAnalyzerBlobStorage analyzerBlobStorage, IConfiguration configuration)
+        public GetSalesPercentagesQueryHandler(IAnalyzerBlobStorage analyzerBlobStorage, IConfiguration configuration,
+            ICsvMaterializer csvMaterializer)
         {
             _analyzerBlobStorage = analyzerBlobStorage;
             _configuration = configuration;
+            _csvMaterializer = csvMaterializer;
         }
 
         public async Task<IEnumerable<SalesPercentage>> Handle(GetSalesPercentagesQuery request,
             CancellationToken cancellationToken)
         {
-            string blobFilePath = _configuration.GetSection("AnalyzerBlobStorage")
-                .GetSection("SalesPercentages")
-                .Value;
-
+            string blobFilePath = _configuration.GetSection("AnalyzerBlobStorage:SalesPercentages").Value;
             string localFilePath = $"{Path.GetTempPath()}/{blobFilePath}";
 
-            Response result = 
-                await _analyzerBlobStorage.DownloadBlobAsync(localFilePath, blobFilePath);
+            Response result = await _analyzerBlobStorage.DownloadBlobAsync(localFilePath, blobFilePath);
 
-            if (result.Status != (int) HttpStatusCode.PartialContent)
-            {
-                return new List<SalesPercentage>();
-            }
-            
-            CsvConfiguration config = new CsvConfiguration(CultureInfo.InvariantCulture)
-            {
-                HasHeaderRecord = false,
-                MissingFieldFound = null,
-                TrimOptions = TrimOptions.Trim,
-                BadDataFound = null
-            };
-
-            using StreamReader reader = new StreamReader(localFilePath);
-            using CsvReader csv = new CsvReader(reader, config);
-            
-            return csv.GetRecords<SalesPercentage>()
-                .Select(_ =>
-                {
-                    _.Percentage = Math.Round(_.Percentage, 2);
-                    _.SalesAmount = Math.Round(_.SalesAmount, 2);
-                    return _;
-                })
-                .OrderByDescending(_ => _.Percentage)
-                .ToList();
+            return result.Status != (int)HttpStatusCode.PartialContent
+                ? new List<SalesPercentage>()
+                : _csvMaterializer.MaterializeFile<SalesPercentage>(localFilePath)
+                    .Select(_ =>
+                    {
+                        _.Percentage = Math.Round(_.Percentage, 2);
+                        _.SalesAmount = Math.Round(_.SalesAmount, 2);
+                        return _;
+                    })
+                    .OrderByDescending(_ => _.Percentage);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
 using Olist.Ecommerce.Analytics.Infrastructure.Cloud.Blobs;
+using Olist.Ecommerce.Analytics.Infrastructure.Files.Csv;
 using Olist.Ecommerce.Analytics.Infrastructure.Hadoop;
 
 namespace Olist.Ecommerce.Analytics.Infrastructure
@@ -23,6 +24,7 @@ namespace Olist.Ecommerce.Analytics.Infrastructure
             services.AddScoped<IAnalyzerBlobStorage, CloudBlobStorage>(_ =>
                 new CloudBlobStorage(configuration.GetConnectionString("AzureStorageAccount"),
                     configuration.GetSection("AnalyzerBlobStorage").GetSection("ContainerName").Value));
+            services.AddScoped<ICsvMaterializer, CsvMaterializer>();
 
             services.AddHttpClient<IWebHdfsClient, WebHdfsClient>();
 

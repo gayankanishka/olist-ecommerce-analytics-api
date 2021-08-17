@@ -19,6 +19,13 @@
 
   <ItemGroup>
     <Folder Include="Caching" />
+    <Folder Include="Logging" />
+    <Folder Include="Files\" />
+    <Folder Include="Files\Csv\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Files\" />
+    <None Remove="Files\Csv\" />
+  </ItemGroup>
 </Project>
