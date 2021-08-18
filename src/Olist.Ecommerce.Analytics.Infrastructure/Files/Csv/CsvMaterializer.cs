@@ -11,7 +11,7 @@ namespace Olist.Ecommerce.Analytics.Infrastructure.Files.Csv
 {
     public class CsvMaterializer : ICsvMaterializer
     {
-        public IList<T> MaterializeFile<T>(string localFilePath)
+        public IEnumerable<T> MaterializeFile<T>(string localFilePath)
         {
             using StreamReader reader = new StreamReader(localFilePath);
             using CsvReader csv = new CsvReader(reader, CsvConfig);

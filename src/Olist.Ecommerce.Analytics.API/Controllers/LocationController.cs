@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocations;
-using Olist.Ecommerce.Analytics.Domain.Constants;
 using Olist.Ecommerce.Analytics.Domain.Models;
 
 namespace Olist.Ecommerce.Analytics.API.Controllers
@@ -44,22 +42,7 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetMostRevenueLocationsAsync()
         {
-            if (_memoryCache.TryGetValue(CacheKeys.MostRevenueLocations, out IEnumerable<Location> locations))
-            {
-                return Ok(locations);
-            }
-
-            locations = await _mediator.Send(new GetMostRevenueLocationsQuery());
-
-            MemoryCacheEntryOptions cacheExpiryOptions = new MemoryCacheEntryOptions
-            {
-                AbsoluteExpiration = DateTime.UtcNow.AddMinutes(60),
-                Priority = CacheItemPriority.High,
-                SlidingExpiration = TimeSpan.FromMinutes(30)
-            };
-
-            _memoryCache.Set(CacheKeys.MostRevenueLocations, locations, cacheExpiryOptions);
-
+            var locations = await _mediator.Send(new GetMostRevenueLocationsQuery());
             return Ok(locations);
         }
     }

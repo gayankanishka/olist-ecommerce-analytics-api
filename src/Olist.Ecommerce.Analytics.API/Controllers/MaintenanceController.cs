@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
+using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
 
 namespace Olist.Ecommerce.Analytics.API.Controllers
 {
@@ -11,15 +11,15 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
     [ApiController]
     public class MaintenanceController : ControllerBase
     {
-        private readonly IMemoryCache _memoryCache;
+        private readonly ICacheStore _cacheStore;
 
         /// <summary>
         /// Constructor of the <see cref="MaintenanceController"/>
         /// </summary>
-        /// <param name="memoryCache"></param>
-        public MaintenanceController(IMemoryCache memoryCache)
+        /// <param name="cacheStore"></param>
+        public MaintenanceController(ICacheStore cacheStore)
         {
-            _memoryCache = memoryCache;
+            _cacheStore = cacheStore;
         }
 
         /// <summary>
@@ -29,17 +29,9 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         [Route("clear-memory-cache")]
         [HttpGet]
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(IActionResult), StatusCodes.Status404NotFound)]
         public IActionResult ClearMemoryCache()
         {
-            if (_memoryCache is not MemoryCache memoryCache)
-            {
-                return NotFound("Cache Not Found!");
-            }
-            
-            double percentage = 1.0;
-            memoryCache.Compact(percentage);
-            
+            _cacheStore.Flush();
             return Ok("Memory Cache Cleared!");
         }
     }

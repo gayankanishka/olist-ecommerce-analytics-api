@@ -4,6 +4,6 @@ namespace Olist.Ecommerce.Analytics.Application.Common.Interfaces
 {
     public interface ICsvMaterializer
     {
-        IList<T> MaterializeFile<T>(string localFilePath);
+        IEnumerable<T> MaterializeFile<T>(string localFilePath);
     }
 }
