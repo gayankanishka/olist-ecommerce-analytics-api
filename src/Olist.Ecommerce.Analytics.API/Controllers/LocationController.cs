@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
 using Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocations;
 using Olist.Ecommerce.Analytics.Domain.Models;
 
@@ -17,17 +16,14 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
     public class LocationController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IMemoryCache _memoryCache;
         
         /// <summary>
         /// Constructor of LocationController.
         /// </summary>
         /// <param name="mediator"></param>
-        /// <param name="memoryCache"></param>
-        public LocationController(IMediator mediator, IMemoryCache memoryCache)
+        public LocationController(IMediator mediator)
         {
             _mediator = mediator;
-            _memoryCache = memoryCache;
         }
 
         /// <summary>
@@ -43,6 +39,7 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         public async Task<IActionResult> GetMostRevenueLocationsAsync()
         {
             var locations = await _mediator.Send(new GetMostRevenueLocationsQuery());
+            
             return Ok(locations);
         }
     }

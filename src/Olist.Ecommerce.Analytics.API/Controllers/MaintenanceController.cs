@@ -26,12 +26,16 @@ namespace Olist.Ecommerce.Analytics.API.Controllers
         /// Clears the memory cache.
         /// </summary>
         /// <returns></returns>
+        /// <response code="200">Success message.</response>
+        /// <response code="500">If something went wrong in the server-end</response>
         [Route("clear-memory-cache")]
         [HttpGet]
         [ProducesResponseType(typeof(IActionResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult ClearMemoryCache()
         {
             _cacheStore.Flush();
+            
             return Ok("Memory Cache Cleared!");
         }
     }
