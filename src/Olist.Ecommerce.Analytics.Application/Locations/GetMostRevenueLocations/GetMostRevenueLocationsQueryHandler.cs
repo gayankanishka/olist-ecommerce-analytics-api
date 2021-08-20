@@ -61,7 +61,8 @@ namespace Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocation
                     {
                         _.Rank += rank++;
                         return _;
-                    });
+                    })
+                    .ToList();
             
             if (locations.Any())
             {

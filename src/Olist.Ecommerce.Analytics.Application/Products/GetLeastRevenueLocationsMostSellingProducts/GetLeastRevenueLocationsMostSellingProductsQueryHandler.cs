@@ -8,6 +8,7 @@ using Azure;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
+using Olist.Ecommerce.Analytics.Domain.Constants;
 
 namespace Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocationsMostSellingProducts
 {
@@ -17,28 +18,46 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocation
         private readonly IAnalyzerBlobStorage _analyzerBlobStorage;
         private readonly IConfiguration _configuration;
         private readonly ICsvMaterializer _csvMaterializer;
+        private readonly ICacheStore _cacheStore;
 
         public GetLeastRevenueLocationsMostSellingProductsQueryHandler(IAnalyzerBlobStorage analyzerBlobStorage,
-            IConfiguration configuration, ICsvMaterializer csvMaterializer)
+            IConfiguration configuration, ICsvMaterializer csvMaterializer, ICacheStore cacheStore)
         {
             _analyzerBlobStorage = analyzerBlobStorage;
             _configuration = configuration;
             _csvMaterializer = csvMaterializer;
+            _cacheStore = cacheStore;
         }
 
         public async Task<IEnumerable<LeastRevenueLocationsMostSellingProductsDto>> Handle(GetLeastRevenueLocationsMostSellingProductsQuery request,
             CancellationToken cancellationToken)
         {
+            var products = _cacheStore.GetItem<IEnumerable<LeastRevenueLocationsMostSellingProductsDto>>
+                (CacheKeys.LeastRevenueLocationsMostSellingProducts);
+
+            if (products != null)
+            {
+                return products;
+            }
+            
             string blobFilePath = _configuration
                 .GetSection("AnalyzerBlobStorage:LeastRevenueLocationsMostSellingProducts").Value;
             string localFilePath = $"{Path.GetTempPath()}/{blobFilePath}";
 
             Response result = await _analyzerBlobStorage.DownloadBlobAsync(localFilePath, blobFilePath);
 
-            return result.Status != (int)HttpStatusCode.PartialContent
+            products = result.Status != (int)HttpStatusCode.PartialContent
                 ? new List<LeastRevenueLocationsMostSellingProductsDto>()
                 : _csvMaterializer.MaterializeFile<LeastRevenueLocationsMostSellingProductsDto>(localFilePath)
-                    .OrderBy(_ => _.RankWithinState);
+                    .OrderBy(_ => _.RankWithinState)
+                    .ToList();
+
+            if (products.Any())
+            {
+                _cacheStore.AddItem(CacheKeys.LeastRevenueLocationsMostSellingProducts, products);
+            }
+
+            return products;
         }
     }
 }
