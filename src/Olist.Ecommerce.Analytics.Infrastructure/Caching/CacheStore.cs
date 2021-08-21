@@ -44,10 +44,13 @@ namespace Olist.Ecommerce.Analytics.Infrastructure.Caching
 
         public void Flush()
         {
-            // double percentage = 1.0;
-            // memoryCache.Compact(percentage);
+            if (_memoryCache is not MemoryCache memoryCache)
+            {
+                throw new NullReferenceException("Cache Not Found!");
+            }
 
-            throw new NotImplementedException();
+            double percentage = 1.0;
+            memoryCache.Compact(percentage);
         }
     }
 }
