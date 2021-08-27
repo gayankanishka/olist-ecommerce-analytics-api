@@ -9,8 +9,12 @@ using Olist.Ecommerce.Analytics.Domain.Mappings;
 
 namespace Olist.Ecommerce.Analytics.Infrastructure.Files.Csv
 {
+    /// <summary>
+    /// Handles the materialization of CSV files.
+    /// </summary>
     public class CsvMaterializer : ICsvMaterializer
     {
+        /// <inheritdoc/>
         public IEnumerable<T> MaterializeFile<T>(string localFilePath)
         {
             using StreamReader reader = new StreamReader(localFilePath);

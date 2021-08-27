@@ -8,10 +8,18 @@ using Olist.Ecommerce.Analytics.Application.Common.Interfaces;
 
 namespace Olist.Ecommerce.Analytics.Infrastructure.Hadoop
 {
+    /// <summary>
+    /// Handles the interaction with the HDFS.
+    /// </summary>
     public class WebHdfsClient : IWebHdfsClient
     {
         private readonly HttpClient _httpClient;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="httpClient"></param>
+        /// <param name="configuration"></param>
         public WebHdfsClient(HttpClient httpClient, IConfiguration configuration)
         {
             httpClient.BaseAddress = new Uri(configuration.GetSection("HdfsBaseUrl").Value);
@@ -20,6 +28,7 @@ namespace Olist.Ecommerce.Analytics.Infrastructure.Hadoop
             SetDefaultHeaders();
         }
 
+        /// <inheritdoc/>
         public async Task<T> OpenAndReadFileAsync<T>(string path)
         {
             string uri = $"/webhdfs/v1/{path}?op={HdfsOperations.OpenAndRead}";
@@ -27,6 +36,7 @@ namespace Olist.Ecommerce.Analytics.Infrastructure.Hadoop
             return await _httpClient.GetFromJsonAsync<T>(uri);
         }
 
+        /// <inheritdoc/>
         public async Task<string> FileOrDirectoryStatusAsync(string path)
         {
             string uri = $"/webhdfs/v1/{path}?op={HdfsOperations.FileOrDirectoryStatus}";
@@ -34,6 +44,7 @@ namespace Olist.Ecommerce.Analytics.Infrastructure.Hadoop
             return await _httpClient.GetStringAsync(uri);
         }
 
+        /// <inheritdoc/>
         public async Task<string> ListDirectoryAsync(string path)
         {
             string uri = $"/webhdfs/v1/{path}?op={HdfsOperations.ListDirectory}";
