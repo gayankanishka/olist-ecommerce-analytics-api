@@ -14,6 +14,9 @@ using Olist.Ecommerce.Analytics.Domain.Models;
 
 namespace Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocations
 {
+    /// <summary>
+    /// Most revenue location query handler.
+    /// </summary>
     public class GetMostRevenueLocationsQueryHandler :
         IRequestHandler<GetMostRevenueLocationsQuery, IEnumerable<Location>>
     {
@@ -22,6 +25,13 @@ namespace Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocation
         private readonly ICsvMaterializer _csvMaterializer;
         private readonly ICacheStore _cacheStore;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="analyzerBlobStorage"></param>
+        /// <param name="configuration"></param>
+        /// <param name="csvMaterializer"></param>
+        /// <param name="cacheStore"></param>
         public GetMostRevenueLocationsQueryHandler(IAnalyzerBlobStorage analyzerBlobStorage,
             IConfiguration configuration, ICsvMaterializer csvMaterializer, ICacheStore cacheStore)
         {
@@ -31,6 +41,12 @@ namespace Olist.Ecommerce.Analytics.Application.Locations.GetMostRevenueLocation
             _cacheStore = cacheStore;
         }
 
+        /// <summary>
+        /// Query handler.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>List of locations.</returns>
         public async Task<IEnumerable<Location>> Handle(GetMostRevenueLocationsQuery request,
             CancellationToken cancellationToken)
         {

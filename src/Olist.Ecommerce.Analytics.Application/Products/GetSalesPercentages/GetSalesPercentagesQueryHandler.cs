@@ -14,6 +14,9 @@ using Olist.Ecommerce.Analytics.Domain.Models;
 
 namespace Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages
 {
+    /// <summary>
+    /// Sales percentages query handler.
+    /// </summary>
     public class GetSalesPercentagesQueryHandler :
         IRequestHandler<GetSalesPercentagesQuery, IEnumerable<SalesPercentage>>
     {
@@ -22,6 +25,13 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages
         private readonly ICsvMaterializer _csvMaterializer;
         private readonly ICacheStore _cacheStore;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="analyzerBlobStorage"></param>
+        /// <param name="configuration"></param>
+        /// <param name="csvMaterializer"></param>
+        /// <param name="cacheStore"></param>
         public GetSalesPercentagesQueryHandler(IAnalyzerBlobStorage analyzerBlobStorage, IConfiguration configuration,
             ICsvMaterializer csvMaterializer, ICacheStore cacheStore)
         {
@@ -31,6 +41,12 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetSalesPercentages
             _cacheStore = cacheStore;
         }
 
+        /// <summary>
+        /// Query handler.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<SalesPercentage>> Handle(GetSalesPercentagesQuery request,
             CancellationToken cancellationToken)
         {

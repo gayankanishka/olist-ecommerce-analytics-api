@@ -12,6 +12,9 @@ using Olist.Ecommerce.Analytics.Domain.Constants;
 
 namespace Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocationsMostSellingProducts
 {
+    /// <summary>
+    /// Least revenue location query handler.
+    /// </summary>
     public class GetLeastRevenueLocationsMostSellingProductsQueryHandler :
         IRequestHandler<GetLeastRevenueLocationsMostSellingProductsQuery, IEnumerable<LeastRevenueLocationsMostSellingProductsDto>>
     {
@@ -20,6 +23,13 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocation
         private readonly ICsvMaterializer _csvMaterializer;
         private readonly ICacheStore _cacheStore;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="analyzerBlobStorage"></param>
+        /// <param name="configuration"></param>
+        /// <param name="csvMaterializer"></param>
+        /// <param name="cacheStore"></param>
         public GetLeastRevenueLocationsMostSellingProductsQueryHandler(IAnalyzerBlobStorage analyzerBlobStorage,
             IConfiguration configuration, ICsvMaterializer csvMaterializer, ICacheStore cacheStore)
         {
@@ -29,6 +39,12 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetLeastRevenueLocation
             _cacheStore = cacheStore;
         }
 
+        /// <summary>
+        /// Query handler.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<LeastRevenueLocationsMostSellingProductsDto>> Handle(GetLeastRevenueLocationsMostSellingProductsQuery request,
             CancellationToken cancellationToken)
         {

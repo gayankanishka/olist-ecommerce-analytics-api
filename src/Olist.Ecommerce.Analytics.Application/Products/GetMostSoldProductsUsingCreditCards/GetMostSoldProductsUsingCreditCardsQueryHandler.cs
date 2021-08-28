@@ -13,6 +13,9 @@ using Olist.Ecommerce.Analytics.Domain.Models;
 
 namespace Olist.Ecommerce.Analytics.Application.Products.GetMostSoldProductsUsingCreditCards
 {
+    /// <summary>
+    /// Most sold products using credit card query.
+    /// </summary>
     public class GetMostSoldProductsUsingCreditCardsQueryHandler :
         IRequestHandler<GetMostSoldProductsUsingCreditCardsQuery, IEnumerable<Product>>
     {
@@ -21,6 +24,13 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetMostSoldProductsUsin
         private readonly ICsvMaterializer _csvMaterializer;
         private readonly ICacheStore _cacheStore;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="analyzerBlobStorage"></param>
+        /// <param name="configuration"></param>
+        /// <param name="csvMaterializer"></param>
+        /// <param name="cacheStore"></param>
         public GetMostSoldProductsUsingCreditCardsQueryHandler(IAnalyzerBlobStorage analyzerBlobStorage,
             IConfiguration configuration, ICsvMaterializer csvMaterializer, ICacheStore cacheStore)
         {
@@ -30,6 +40,12 @@ namespace Olist.Ecommerce.Analytics.Application.Products.GetMostSoldProductsUsin
             _cacheStore = cacheStore;
         }
 
+        /// <summary>
+        /// Query handler.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>List of products.</returns>
         public async Task<IEnumerable<Product>> Handle(GetMostSoldProductsUsingCreditCardsQuery request,
             CancellationToken cancellationToken)
         {
