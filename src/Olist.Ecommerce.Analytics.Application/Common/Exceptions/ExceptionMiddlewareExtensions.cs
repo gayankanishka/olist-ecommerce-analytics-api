@@ -6,8 +6,15 @@ using Olist.Ecommerce.Analytics.Domain.Exceptions;
 
 namespace Olist.Ecommerce.Analytics.Application.Common.Exceptions
 {
+    /// <summary>
+    /// Global exception handler extensions.
+    /// </summary>
     public static class ExceptionMiddlewareExtensions
     {
+        /// <summary>
+        /// Configures the global exception handler.
+        /// </summary>
+        /// <param name="app"></param>
         public static void ConfigureExceptionHandler(this IApplicationBuilder app)
         {
             app.UseExceptionHandler(appError => 
@@ -20,9 +27,7 @@ namespace Olist.Ecommerce.Analytics.Application.Common.Exceptions
                     IExceptionHandlerFeature contextFeature = context.Features.Get<IExceptionHandlerFeature>();
                     
                     if (contextFeature != null) 
-                    { 
-                        // logger.LogError($"Something went wrong: {contextFeature.Error}");
-                        
+                    {
                         await context.Response.WriteAsync(new ErrorDetails()
                         { 
                             StatusCode = context.Response.StatusCode,
