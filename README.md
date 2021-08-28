@@ -15,6 +15,7 @@ What's included:
 - [CsvHelper](https://joshclose.github.io/CsvHelper/)
 - [Azure Blob Storage](https://azure.microsoft.com/en-us/services/storage/blob-storage/)
 - [Swagger](https://swagger.io/)
+- [WebHDFS](https://hadoop.apache.org/docs/r1.0.4/webhdfs.html)
 
 ## Table of Content
 
